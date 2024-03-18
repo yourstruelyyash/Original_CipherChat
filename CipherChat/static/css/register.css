@@ -1,0 +1,106 @@
+      h1 {
+        color: #007bff; /* Bootstrap primary color */
+        font-size: 2.5rem; /* Adjust the font size as needed */
+        margin-bottom: 20px; /* Add some space below the heading */
+        text-align: center; /* Center the heading */
+      }
+#progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+#fill-progress {
+  height: 100%;
+  background-color: #007bff; /* Example fill color */
+  border-radius: 10px;
+  width: 0%; /* Initial width, adjust this dynamically with JavaScript if needed */
+}
+
+        }
+      .navbar {
+        background-color: #f8f9fa;
+        color: #000; /* Black */
+        transition: background-color 0.5s, color 0.5s;
+      }
+
+      .navbar.dark-mode {
+        background-color: #343a40;
+        color: #fff; /* White */
+      }
+
+      .navbar-brand img {
+        max-height: 50px;
+        /* Adjust the max height as needed */
+        padding-right: 5px;
+      }
+
+      .dark-mode {
+        background-color: #343a40;
+        /* Example dark mode background color */
+        color: #ffffff;
+        /* Example dark mode text color */
+      }
+
+      .dark-mode h1,
+      .dark-mode a,
+      .dark-mode p {
+        color: #ffffff;
+        /* Adjust text color for dark mode */
+      }
+
+      form {
+        max-width: 400px;
+        margin: auto;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      li {
+        color: green;
+        /* Adjust based on Bootstrap alert styles */
+      }
+
+      li.error {
+        color: red;
+        /* Adjust based on Bootstrap alert styles */
+      }
+
+      .cssbuttons-io-button {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 0.8em 1.5em 0.8em 1.2em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgb(120, 47, 255) 0%, rgb(185, 132, 255) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em rgb(184, 146, 255);
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+}
+
+.cssbuttons-io-button svg {
+  margin-right: 8px;
+}
+
+.cssbuttons-io-button:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em rgb(149, 91, 255);
+}
+
+.cssbuttons-io-button:active {
+  box-shadow: 0 0.3em 1em -0.5em rgb(160, 109, 255);
+}
+
+      body {
+        font-family: 'Open Sans', sans-serif;
+        font-optical-sizing: auto;
+        padding-top: 56px;
+        transition: background-color 0.5s, color 0.5s;
+      }

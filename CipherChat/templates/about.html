@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <style>
+      body {
+        font-family: 'Open Sans', sans-serif;
+        font-optical-sizing: auto;
+        padding-top: 56px;
+        transition: background-color 0.5s, color 0.5s;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      h3 {
+        color: #009bff;
+      }
+
+      h1 {
+        color: #007bff; /* Bootstrap primary color */
+        font-size: 2.5rem; /* Adjust the font size as needed */
+        margin-bottom: 20px; /* Add some space below the heading */
+        text-align: center; /* Center the heading */
+      }
+
+      .dark-mode {
+        background-color: #343a40;
+        /* Example dark mode background color */
+        color: #ffffff;
+        /* Example dark mode text color */
+      }
+
+      .dark-mode h1,
+      .dark-mode a,
+      .dark-mode p {
+        color: #ffffff;
+        /* Adjust text color for dark mode */
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <h1>About Us</h1>
+      <p>Welcome to CipherChat, your secure and private instant messaging platform. Our mission is to provide a reliable and encrypted communication platform for users who prioritize privacy and security.</p>
+      <h3>Our Team</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Yashvardhan Sharma</h5>
+          <p>Founder & Sole Developer</p>
+        </div>
+        <h3>Our Vision</h3>
+        <p>We envision a world where individuals can communicate freely and securely without compromising their privacy. CipherChat is committed to developing innovative solutions to empower users with control over their personal information.</p>
+      </div>
+      <div class="container-fluid bg-light fixed-bottom">
+        <div class="form-check form-switch text-center">
+          <input class="form-check-input" type="checkbox" id="modeSwitch">
+          <label class="form-check-label" for="modeSwitch">Slide the switch to change mode</label>
+        </div>
+      </div>
+    <script>
+      // Dark mode functionality
+      const modeSwitch = document.getElementById('modeSwitch');
+      const body = document.body;
+      const navbar = document.querySelector('.navbar');
+      modeSwitch.addEventListener('change', () => {
+        body.classList.toggle('dark-mode');
+        navbar.classList.toggle('dark-mode');
+      });
+    </script>
+      <!-- Bootstrap JS CDN and your custom scripts go here -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-rbs5gaXGx6LOZ7JS5Q3iKdzX2Pz5N1cMI1qLdJXjkX3GYbsMXjPQbCEOmEGIbbXi" crossorigin="anonymous"></script>
+    </div>
+  </body>
+</html>

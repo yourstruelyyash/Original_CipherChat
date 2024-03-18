@@ -1,0 +1,51 @@
+      body {
+        font-family: 'Open Sans', sans-serif;
+        font-optical-sizing: auto;
+        padding-top: 56px;
+        transition: background-color 0.5s, color 0.5s;
+      }
+
+      .navbar {
+        background-color: #f8f9fa;
+        color: #000; /* Black */
+      }
+
+      .navbar.dark-mode {
+        background-color: #343a40;
+        color: #fff; /* White */
+      }
+
+      .navbar-brand img {
+        max-height: 50px;
+        padding-right: 10px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .dark-mode {
+        background-color: #343a40;
+        /* Example dark mode background color */
+        color: #ffffff;
+        /* Example dark mode text color */
+      }
+
+      h1 {
+        color: #007bff; /* Bootstrap primary color */
+        font-size: 2.5rem; /* Adjust the font size as needed */
+        margin-bottom: 20px; /* Add some space below the heading */
+        text-align: center; /* Center the heading */
+      }
+
+      strong {
+        color: #009bff;
+        /* Bootstrap primary color */
+      }
+
+      .dark-mode h1,
+      .dark-mode a,
+      .dark-mode p {
+        color: #ffffff;
+        /* Adjust text color for dark mode */
+      }

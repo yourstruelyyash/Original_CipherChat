@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/search.css">
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <title>User Search</title>
+</head>
+<body>
+    <h2>Search User</h2>
+    <form method="POST" action="{{ url_for('search') }}">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">@</span>
+            <input type="text" class="form-control" name="search_username" placeholder="Enter your friends' username" aria-label="Username" aria-describedby="basic-addon1">
+            <button type="submit"onload="">Search</button>
+        </div>
+    </form>
+</body>
+</html>
