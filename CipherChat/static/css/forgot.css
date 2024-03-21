@@ -1,0 +1,19 @@
+      body {
+        background-color: #f8f9fa;
+        /* Bootstrap default light background color */
+        padding: 20px;
+      }
+
+      h1 {
+        color: #007bff;
+        /* Bootstrap primary color */
+      }
+
+      form {
+        max-width: 400px;
+        margin: auto;
+      }
+
+      p {
+        text-align: center;
+      }
