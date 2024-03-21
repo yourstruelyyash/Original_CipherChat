@@ -12,7 +12,7 @@ from flask_login import (
     login_user,
 )
 from flask_migrate import Migrate
-from flask_socketio import SocketIO, join_room
+from flask_socketio import SocketIO, join_room, emit
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
@@ -272,6 +272,19 @@ def handle_message(data):
     return {'error': 'Sender or receiver not found in the database'}, 400
 
 
+# Socket.io event handlers
+@app.route("/fetch_messages", methods=["GET"])
+@login_required
+def fetch_messages():
+    if request.method == "GET":
+        # Fetch new messages from the database
+        receiver_username = request.args.get('receiver')
+        messages = Message.query.filter_by(receiver=receiver_username).all()
+        message_data = [{'sender': message.sender.username, 'content': message.content} for message in messages]
+        print("Fetched messages:", message_data)
+        return jsonify({'messages': message_data})
+
+
 @socketio.on('error')
 def handle_error(event):
     print('WebSocket Error:', event)
@@ -325,7 +338,8 @@ def register():
             return redirect(url_for("register"))
 
         # Save the uploaded file to a secure location
-        filename = secure_filename(f"{uuid.uuid4().hex}.png")
+        filename = secure_filename(profile_picture.filename)
+        filename = os.path.basename(filename)  # Remove relative path
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         profile_picture.save(file_path)
 
@@ -336,7 +350,7 @@ def register():
             email=email,
             date_of_birth=date_of_birth,
             content='',
-            profile_picture=file_path,
+            profile_picture=filename,
             sender_id=User.id,
             receiver_id=User.id
         )
@@ -372,7 +386,7 @@ def login():
             )
 
         else:
-            flash("Invalid username or password", "error")
+            flash("Invalid username or password, please try again!", "error")
             return redirect(url_for("login"))
 
     if current_user.is_authenticated:

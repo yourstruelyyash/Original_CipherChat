@@ -1,46 +1,48 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var socket = io.connect('http://127.0.0.1:5000');
-    const receiverUsername = document.getElementById('chatting-with').innerText.replace('Chatting with: ', '');
+    // Establish WebSocket connection
+    var socket = io.connect('http://192.168.1.7:5000');
 
+    // Check WebSocket connection status
     socket.on('connect', function() {
         console.log('Socket connection status:', socket.readyState === WebSocket.OPEN);
     });
 
-    const sendButton = document.getElementById('send-button');
-    sendButton.addEventListener('click', sendMessage);
-    const logoutButton = document.getElementById('logout-button')
-    logoutButton.addEventListener('click', logout);
-
+    // Function to handle user logout
     function logout() {
         window.location.href = '/logout';
     }
 
-    const loggedInUser = {
-        username: "{{ user.username }}",
-    };
+    // Event listener for logout button
+    const logoutButton = document.getElementById('logout-button');
+    logoutButton.addEventListener('click', logout);
 
-    socket.on('message', function(data) {
-        appendMessage(data.sender, data.message);
-    });
-
+    // Function to send a message
     function sendMessage() {
         const messageInput = document.getElementById('message-input');
         const message = messageInput.value;
         const receiverUsername = document.getElementById('chatting-with').innerText.replace('Chatting with: ', '');
         const senderUsername = document.getElementById('sender').innerText.replace('Sender: ', '');
 
+        // Data object to send over WebSocket
         const messageData = {
             sender: senderUsername,
             receiver: receiverUsername,
             content: message
         };
 
+        // Append sent message to chat interface
         appendMessage('You', message);
         messageInput.value = '';
 
+        // Emit 'send_message' event to server via WebSocket
         socket.emit('send_message', messageData);
     }
 
+    // Event listener for send button
+    const sendButton = document.getElementById('send-button');
+    sendButton.addEventListener('click', sendMessage);
+
+    // Function to append a message to the chat interface
     function appendMessage(sender, message) {
         const chatBox = document.querySelector('.messages');
         const messageDiv = document.createElement('div');
@@ -49,10 +51,12 @@ document.addEventListener("DOMContentLoaded", function() {
         scrollDownChatBox(chatBox);
     }
 
-     function scrollDownChatBox(chatBox) {
+    // Function to scroll down the chat interface
+    function scrollDownChatBox(chatBox) {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
+    // Function to toggle dark mode
     const modeSwitch = document.getElementById('modeSwitch');
     const body = document.body;
     const chatContainer = document.querySelector('.chat-container');
@@ -62,9 +66,29 @@ document.addEventListener("DOMContentLoaded", function() {
         chatContainer.classList.toggle('dark-mode');
     });
 
-    // Listen for new messages from the server
-    socket.on('receive_message', function(data) {
-        console.log('Received message:', data);
-        appendMessage(data.sender, data.content);
-    });
+    // Function to fetch new messages from the server using AJAX
+    function fetchNewMessages() {
+        $.ajax({
+            url: '/fetch_messages', // URL of your server-side endpoint
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response && response.messages) {
+                    // Update the chat interface with new messages
+                    response.messages.forEach(function(message) {
+                        appendMessage(message.sender, message.content);
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching messages:', error);
+            }
+        });
+    }
+
+    // Call fetchNewMessages function initially
+    fetchNewMessages();
+
+    // Periodically fetch new messages without refreshing the page
+    setInterval(fetchNewMessages, 5000); // Adjust the interval as needed
 });

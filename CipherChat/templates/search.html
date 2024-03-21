@@ -4,19 +4,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Search</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/search.css">
-    <script src="/static/js/bootstrap.bundle.min.js"></script>
-    <title>User Search</title>
 </head>
 <body>
-    <h2>Search User</h2>
-    <form method="POST" action="{{ url_for('search') }}">
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">@</span>
-            <input type="text" class="form-control" name="search_username" placeholder="Enter your friends' username" aria-label="Username" aria-describedby="basic-addon1">
-            <button type="submit"onload="">Search</button>
+    <div class="container">
+        <h1 class="title">Search for Users</h1>
+        <div class="search-container">
+            <form method="POST" action="{{ url_for('search') }}" id="searchForm">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search_username" id="searchInput" placeholder="Enter your friends' username" aria-label="Username" aria-describedby="basic-addon1">
+                    <span class="input-group-addon" id="basic-addon1">
+                        <button type="submit" class="search-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg2/" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="none" d="M0 0h24v24H0z"/>
+                                <path d="M21.41 20.59l-5.1-5.1a7.5 7.5 0 10-1.414 1.414l5.1 5.1a1 1 0 101.414-1.414zM6 13.5a7.5 7.5 0 117.5-7.5 7.5 7.5 0 01-7.5 7.5z"/>
+                            </svg>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            <div id="search-results"></div>
         </div>
-    </form>
+    </div>
+<script src="/static/js/search.js"></script>
 </body>
 </html>

@@ -9,26 +9,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/chat.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" integrity="sha512-tE1z+95+lMCGwy+9PnKgUSIeHhvioC9lMlI7rLWU0Ps3XTdjRygLcy4mLuL0JAoK4TLdQEyP0yOl/9dMOqpH/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/static/js/socket.io.js"></script>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <title>Chat</title>
+    <script src="/static/js/jquery.min.js"></script>
 </head>
 
 <body>
     <div class="container">
         <div class="chat-container">
             <div class="header">
-                <img src="/uploads/{{ user.profile_picture }}" alt="Profile Picture" class="avatar">
+                <img src="/uploads/{{ receiver.profile_picture }}" alt="Profile Picture" class="avatar">
                 <div class="user-info">
-                    <h2 id="sender">Sender: {{ user.username }}</h2>
-                    <p id="chatting-with">Chatting with: {{ receiver.username }}</p>
+                    <h2 id="sender">{{ receiver.username }}</h2>
+                    <p id="chatting-with">{{ receiver.name }}</p>
                 </div>
                 <a href="/settings">
                 <button class="settings-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" class="svg-icon">
                         <g stroke-width="1.5" stroke-linecap="round" stroke="#5d41de">
                             <circle r="2.5" cy="10" cx="10"></circle>
-                            <path fill-rule="evenodd" d="m8.39079 2.80235c.53842-1.51424 2.67991-1.51424 3.21831-.00001.3392.95358 1.4284 1.40477 2.3425.97027 1.4514-.68995 2.9657.82427 2.2758 2.27575-.4345.91407.0166 2.00334.9702 2.34248 1.5143.53842 1.5143 2.67996 0 3.21836-.9536.3391-1.4047 1.4284-.9702 2.3425.6899 1.4514-.8244 2.9656-2.2758 2.2757-.9141-.4345-2.0033.0167-2.3425.9703-.5384 1.5142-2.67989 1.5142-3.21831 0-.33914-.9536-1.4284-1.4048-2.34247-.9703-1.45148.6899-2.96571-.8243-2.27575-2.2757.43449-.9141-.01669-2.0034-.97028-2.3425-1.51422-.5384-1.51422-2.67994.00001-3.21836.95358-.33914 1.40476-1.42841.97027-2.34248-.68996-1.45148.82427-2.9657 2.27575-2.27575.91407.4345 2.00333-.01669 2.34247-.97026z" clip-rule="evenodd"></path>
+                            <path fill-rule="evenodd" d="m8.39079 2.80235c.53842-1.51424 2.67991-1.51424 3.21831-.00001.3392.95358 1.4284 1.40477 2.3425.97027 1.4514-.68995 2.9657.82427 2.2758 2.27575-.4345.91407.0166 2.00334.9702 2.34248 1.5143.53842 1.5143 2.67996 0 3.21836-.9536.3391-1.4047 1.4284-.9702 2.3425.6899 1.4514-.8244 2.9656-2.2758 2.2757-.9141-.4345-2.0033-.01669-2.3425.9703-.5384 1.5142-2.67989 1.5142-3.21831 0-.33914-.9536-1.4284-1.4048-2.34247-.9703-1.45148.6899-2.96571-.8243-2.27575-2.2757.43449-.9141-.01669-2.0034-.97028-2.3425-1.51422-.5384-1.51422-2.67994.00001-3.21836.95358-.33914 1.40476-1.42841.97027-2.34248-.68996-1.45148.82427-2.9657 2.27575-2.27575.91407.4345 2.00333-.01669 2.34247-.97026z" clip-rule="evenodd"></path>
                         </g>
                     </svg>
                     <span class="label"></span>
@@ -36,16 +37,17 @@
                 </a>
             </div>
 
-            <div class="messages">
-                <!-- Display the chat messages -->
-                {% for message in messages %}
-                    <div class="message">
-                        <img src="/uploads/{{ message.sender.profile_picture }}" alt="Profile Picture" class="avatar">
-                        <p class="sender">{{ message.sender.username }}:</p>
-                        <p class="content">{{ message.content }}</p>
-                    </div>
-                {% endfor %}
+<div class="messages">
+    {% for message in messages %}
+        <div class="message {% if message.sender_id != current_user.id %}received{% else %}sent{% endif %}">
+            <div class="message-content">
+                <p class="content">{{ message.content }}</p>
             </div>
+        </div>
+    {% endfor %}
+</div>
+
+
 
             <div class="chat-box">
                 <input type="text" id="message-input" placeholder="Type your message...">
@@ -57,20 +59,10 @@
     <div class="container-fluid bg-light fixed-bottom">
         <div class="form-check form-switch text-center">
             <input class="form-check-input" type="checkbox" id="modeSwitch">
-            <label class="form-check-label" for="modeSwitch">Slide the switch to change mode</label>
+            <label class="form-check-label" for="modeSwitch">Click to change mode</label>
         </div>
     </div>
     <script defer src="/static/js/chat.js"></script>
-    <script>
-        function refreshPage() {
-            var refreshInterval = 300000;
-
-            setTimeout(function() {
-                location.reload();
-            }, refreshInterval);
-        }
-        refreshPage();
-    </script>
 </body>
 
 </html>
