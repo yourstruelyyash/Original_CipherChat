@@ -38,18 +38,18 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     name = db.Column(db.String(50), nullable=False)
-    content = db.Column(db.String(255), nullable=False, default='')
+    content = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     date_of_birth = db.Column(db.String(50), nullable=False)
-    sender_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     profile_picture = db.Column(db.Text, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
     receiver_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     sent_messages = db.relationship("Message", back_populates="sender", lazy=True, foreign_keys="Message.sender_id")
     received_messages = db.relationship("Message", back_populates="receiver", lazy=True, foreign_keys="Message.receiver_id")
-    receiver = db.relationship("User", foreign_keys=[receiver_id], uselist=False)
-    sender = db.relationship("User", foreign_keys=[sender_id], uselist=False)
+    sender = db.relationship('User', back_populates='sent_messages', foreign_keys=[sender_id], overlaps="received_messages")
+    receiver = db.relationship('User', back_populates='received_messages', foreign_keys=[receiver_id], overlaps="sender")
 
     def __init__(self, username, password, name, email, date_of_birth, profile_picture, sender_id, receiver_id, content=''):
         self.username = username
