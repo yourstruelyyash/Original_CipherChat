@@ -79,8 +79,8 @@ class Message(db.Model):
     content = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
 
-    sender = db.relationship('User', back_populates='sent_messages', foreign_keys=[receiver_id], overlaps="received_messages")
-    receiver = db.relationship('User', back_populates='received_messages', foreign_keys=[receiver_id], overlaps="sender")
+    sender = db.relationship('User', back_populates='sent_messages', foreign_keys=[receiver_id])
+    receiver = db.relationship('User', back_populates='received_messages', foreign_keys=[receiver_id])
 
     def __repr__(self):
         return f"<Message {self.id}>"
