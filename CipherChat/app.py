@@ -49,7 +49,7 @@ class User(UserMixin, db.Model):
     sent_messages = db.relationship("Message", back_populates="sender", lazy=True, foreign_keys="Message.sender_id")
     received_messages = db.relationship("Message", back_populates="receiver", lazy=True, foreign_keys="Message.receiver_id")
 
-    def __init__(self, username, password, name, email, date_of_birth, profile_picture, content="", sender_id, receiver_id):
+    def __init__(self, username, password, name, email, date_of_birth, profile_picture, content, sender_id, receiver_id):
         self.username = username
         self.password = password
         self.name = name
