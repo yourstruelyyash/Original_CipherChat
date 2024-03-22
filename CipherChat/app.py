@@ -38,7 +38,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     name = db.Column(db.String(50), nullable=False)
-    content = db.Column(db.String(255), nullable=False, default='')
+    content = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     date_of_birth = db.Column(db.String(50), nullable=False)
     profile_picture = db.Column(db.Text, nullable=True)
@@ -54,7 +54,6 @@ class User(UserMixin, db.Model):
         self.email = email
         self.date_of_birth = date_of_birth
         self.profile_picture = profile_picture
-        self.content = content
 
     def check_password(self, entered_password):
         return self.password == entered_password
