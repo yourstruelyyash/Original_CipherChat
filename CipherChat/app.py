@@ -461,4 +461,4 @@ def load_user(user_id):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    socketio.run(app)
+    socketio.run(app, host="100.20.92.101", port=5000, debug=True, use_reloader=False, allow_unsafe_werkzeug=True)
