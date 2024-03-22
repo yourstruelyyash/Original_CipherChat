@@ -33,7 +33,7 @@ login_manager.init_app(app)
 
 
 # Define the User model
-class User(UserMixin, db.Model):
+class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
@@ -63,13 +63,13 @@ class User(UserMixin, db.Model):
 # Define the Message model
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     content = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
 
-    sender = db.relationship('User', back_populates='sent_messages', foreign_keys=[sender_id])
-    receiver = db.relationship('User', back_populates='received_messages', foreign_keys=[receiver_id])
+    sender = db.relationship('Users', back_populates='sent_messages', foreign_keys=[sender_id])
+    receiver = db.relationship('Users', back_populates='received_messages', foreign_keys=[receiver_id])
 
     def __repr__(self):
         return f"<Message {self.id}>"
@@ -89,8 +89,8 @@ def index():
 @app.route("/profile")
 @login_required
 def profile():
-    user = current_user
-    return render_template("profile.html", user=user)
+    users = current_user
+    return render_template("profile.html", users=users)
 
 
 @app.route("/save_settings", methods=["POST"])
@@ -98,10 +98,10 @@ def profile():
 def save_settings():
     if request.method == "POST":
         # Get the current user
-        user = current_user
+        users = current_user
 
         # Update user information based on the form data
-        user.username = request.form.get("username")
+        users.username = request.form.get("username")
 
         if "profile_picture" in request.files:
             profile_picture = request.files["profile_picture"]
@@ -109,11 +109,11 @@ def save_settings():
                 filename = secure_filename(f"{uuid.uuid4().hex}.png")
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 profile_picture.save(file_path)
-                user.profile_picture = file_path
+                users.profile_picture = file_path
 
         new_password = request.form.get("password")
         if new_password:
-            user.password = new_password
+            users.password = new_password
 
         # Commit changes to the database
         db.session.commit()
@@ -136,11 +136,11 @@ def search():
         search_username = request.form.get("search_username")
 
         # Search for the user in the database
-        user = User.query.filter_by(username=search_username).first()
+        users = User.query.filter_by(username=search_username).first()
 
         if user:
             # Redirect to the dynamically created chat endpoint
-            return redirect(url_for("chat", receiver_username=user.username))
+            return redirect(url_for("chat", receiver_username=users.username))
         else:
             flash("User not found. Please try again.", "warning")
 
@@ -152,7 +152,7 @@ def search():
 @app.route("/search_users", methods=["GET"])
 def search_users():
     term = request.args.get("term", "").lower()
-    matching_users = User.search_users(term)
+    matching_users = Users.search_users(term)
     return jsonify(matching_users)
 
 
@@ -162,31 +162,31 @@ def chat(receiver_username):
     # Check if the user is logged in
     if current_user.is_authenticated:
         # Fetch the current user from the database based on the logged-in user
-        user = current_user
+        users = current_user
 
         # Fetch the receiver user from the database based on the provided username
-        receiver_user = User.query.filter_by(username=receiver_username).first()
+        receiver_user = Users.query.filter_by(username=receiver_username).first()
 
         # Check if both users exist before proceeding
-        if user and receiver_user:
+        if users and receiver_user:
             # Fetch messages from the database based on the current user and receiver user
             messages = Message.query.filter(
-                ((Message.sender_id == user.id) & (Message.receiver_id == receiver_user.id))
+                ((Message.sender_id == users.id) & (Message.receiver_id == receiver_user.id))
                 | (
                     (Message.sender_id == receiver_user.id)
-                    & (Message.receiver_id == user.id)
+                    & (Message.receiver_id == users.id)
                 )
             ).all()
 
             # Fetch a list of users involved in the chat for the sidebar
-            users = [user, receiver_user]
+            userss = [users, receiver_user]
 
             return render_template(
                 "chat.html",
-                user=user,
+                users=users,
                 receiver=receiver_user,
                 messages=messages,
-                users=users,
+                userss=userss,
             )
         else:
             # Handle the case where either the current user or receiver user is not found
@@ -234,11 +234,11 @@ def handle_message(data):
         return {'error': 'Receiver, content, or sender missing'}, 400
 
     # Ensure the sender exists in the database
-    sender = User.query.filter_by(username=sender_username).first()
+    sender = Users.query.filter_by(username=sender_username).first()
 
     if sender:
         # Fetch the receiver user from the database based on the provided username
-        receiver_user = User.query.filter_by(username=receiver).first()
+        receiver_user = Users.query.filter_by(username=receiver).first()
 
         if receiver_user:
             # Create a new message and add it to the database
@@ -302,7 +302,7 @@ def settings():
         return redirect(url_for("settings"))
 
     # Render the settings page with the current user's information
-    return render_template("profile.html", user=current_user)
+    return render_template("profile.html", users=current_user)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -315,7 +315,7 @@ def register():
         email = request.form["email"]
         profile_picture = request.files["profile_picture"]
 
-        existing_user = User.query.filter_by(username=username).first()
+        existing_user = Users.query.filter_by(username=username).first()
 
         if existing_user:
             flash("Username already exists. Please choose a different one.", "danger")
@@ -332,7 +332,7 @@ def register():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         profile_picture.save(file_path)
 
-        new_user = User(
+        new_users = Users(
             username=username,
             password=password,
             name=name,
@@ -340,16 +340,16 @@ def register():
             date_of_birth=date_of_birth,
             profile_picture=filename,
             content='',
-            sender_id=User.id,
-            receiver_id=User.id
+            sender_id=Users.id,
+            receiver_id=Users.id
         )
 
-        db.session.add(new_user)
+        db.session.add(new_users)
         db.session.commit()
 
-        new_user.sender_id = new_user.id
-        new_user.content = "Welcome to CipherChat! Feel free to start chatting."
-        new_user.receiver_id = new_user.id
+        new_users.sender_id = new_users.id
+        new_users.content = "Welcome to CipherChat! Feel free to start chatting."
+        new_users.receiver_id = new_users.id
 
         db.session.commit()
 
@@ -365,10 +365,10 @@ def login():
         username = request.form["username"]
         entered_password = request.form["password"]
 
-        user = User.query.filter_by(username=username).first()
+        users = Users.query.filter_by(username=username).first()
 
-        if user and user.check_password(entered_password):
-            login_user(user)
+        if users and users.check_password(entered_password):
+            login_user(users)
             flash("Login successful!", "success")
             return redirect(
                 url_for("search")
@@ -420,12 +420,12 @@ def forgot_password():
         try:
             date_of_birth = datetime.strptime(date_of_birth, "%m-%d-%Y")
 
-            user = User.query.filter_by(
+            users = Users.query.filter_by(
                 username=username,
                 date_of_birth=date_of_birth,
             ).first()
 
-            if user:
+            if users:
                 flash(
                     "Password changes successfully, you can login with new password :).",
                     "info",
@@ -444,7 +444,7 @@ def forgot_password():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return Users.query.get(int(user_id))
 
 
 if __name__ == "__main__":
