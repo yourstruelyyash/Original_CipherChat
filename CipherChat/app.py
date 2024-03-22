@@ -42,7 +42,7 @@ class Users(UserMixin, db.Model):
     date_of_birth = db.Column(db.String(50), nullable=False)
     profile_picture = db.Column(db.Text, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
-    sent_messages = db.relationship("Message", back_populates="sender", lazy=True)
+    sent_messages = db.relationship("Message", back_populates="sender", foreign_keys="Message.sender_id", lazy=True)
 
 
     def __init__(self, username, password, name, email, date_of_birth, profile_picture):
