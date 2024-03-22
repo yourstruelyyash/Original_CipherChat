@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Establish WebSocket connection
-    var socket = io.connect('http://0.0.0.0:10000');
+    var socket = io.connect('http://100.20.92.101:5000');
     // Check WebSocket connection status
     socket.on('connect', function() {
         console.log('Socket connection status:', socket.readyState === WebSocket.OPEN);
