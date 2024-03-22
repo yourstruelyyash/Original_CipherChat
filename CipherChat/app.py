@@ -39,7 +39,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(60), nullable=False)
     name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
-    date_of_birth = db.Column(db.String(50), nullable=False)
+    date_of_birth = db.Column(db.Date, nullable=False)  # Use Date type for date_of_birth
     profile_picture = db.Column(db.Text, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
 
@@ -63,7 +63,7 @@ class User(UserMixin, db.Model):
         usernames = [user.username for user in matching_users]
         return usernames
 
-
+# Define the Message model
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
