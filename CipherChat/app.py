@@ -341,19 +341,10 @@ def register():
             name=name,
             email=email,
             date_of_birth=date_of_birth,
-            content='',
             profile_picture=filename,
-            sender_id=User.id,
-            receiver_id=User.id
         )
 
         db.session.add(new_user)
-        db.session.commit()
-
-        new_user.sender_id = new_user.id
-        new_user.content = "Welcome to CipherChat! Feel free to start chatting."
-        new_user.receiver_id = new_user.id
-
         db.session.commit()
 
         flash("Registration successful! You can now log in.", "success")
