@@ -40,14 +40,14 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)  # Use Date type for date_of_birth
-    profile_picture = db.Column(db.Text, nullable=True)
+    profile_picture = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
     content = db.Column(db.String, default="")
 
     sent_messages = db.relationship("Message", back_populates="sender", lazy=True, foreign_keys="Message.sender_id")
     received_messages = db.relationship("Message", back_populates="receiver", lazy=True, foreign_keys="Message.receiver_id")
 
-    def __init__(self, username, password, name, email, date_of_birth, profile_picture=None, content=""):
+    def __init__(self, username, password, name, email, date_of_birth, profile_picture, content=""):
         self.username = username
         self.password = password
         self.name = name
