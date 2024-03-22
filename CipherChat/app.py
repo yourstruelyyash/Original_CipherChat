@@ -20,7 +20,7 @@ app = Flask(__name__, static_url_path='/static')
 socketio = SocketIO(app, logger=True, cors_allowed_origins="*")
 CORS(app, resources={r"/static/*": {"origins": "*"}})
 app.config["SECRET_KEY"] = "7841"
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://cipherchat_db_user:FT0uWXBJicl634HLavOijeFEPxV4inPB@dpg-cnukjvcf7o1s739ogfdg-a/cipherchat_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://cipherchat_db_user:FT0uWXBJicl634HLavOijeFEPxV4inPB@dpg-cnukjvcf7o1s739ogfdg-a/cipherchat_db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['UPLOAD_FOLDER'] = os.path.abspath(os.path.join('static', 'uploads'))
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
