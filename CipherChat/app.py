@@ -344,7 +344,7 @@ def register():
             email=email,
             date_of_birth=date_of_birth,
             profile_picture=filename,
-            content=''
+            content='',
             sender_id=User.id,
             receiver_id=User.id
         )
