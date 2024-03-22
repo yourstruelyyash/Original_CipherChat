@@ -48,8 +48,8 @@ class User(UserMixin, db.Model):
 
     sent_messages = db.relationship("Message", back_populates="sender", lazy=True, foreign_keys="Message.sender_id")
     received_messages = db.relationship("Message", back_populates="receiver", lazy=True, foreign_keys="Message.receiver_id")
-    sender = db.relationship('User', back_populates='sent_messages', foreign_keys="sender_id")
-    receiver = db.relationship('User', back_populates='received_messages', foreign_keys="receiver_id")
+    sender = db.relationship('User', back_populates='sent_messages', foreign_keys=sender_id)
+    receiver = db.relationship('User', back_populates='received_messages', foreign_keys=receiver_id)
 
     def __init__(self, username, password, name, email, date_of_birth, profile_picture, sender_id, receiver_id, content=''):
         self.username = username
