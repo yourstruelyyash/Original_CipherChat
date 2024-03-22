@@ -47,7 +47,7 @@ class User(UserMixin, db.Model):
     sent_messages = db.relationship("Message", back_populates="sender", lazy=True, foreign_keys="Message.sender_id")
     received_messages = db.relationship("Message", back_populates="receiver", lazy=True, foreign_keys="Message.receiver_id")
 
-    def __init__(self, username, password, name, email, date_of_birth, profile_picture, content=""):
+    def __init__(self, username, password, name, email, date_of_birth, profile_picture, content="", sender_id=None, receiver_id=None):
         self.username = username
         self.password = password
         self.name = name
@@ -55,6 +55,8 @@ class User(UserMixin, db.Model):
         self.date_of_birth = date_of_birth
         self.profile_picture = profile_picture
         self.content = content
+        self.sender_id = sender_id
+        self.receiver_id = receiver_id
 
     def check_password(self, entered_password):
         return self.password == entered_password
