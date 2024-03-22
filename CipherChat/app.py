@@ -72,7 +72,7 @@ class Message(db.Model):
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
 
     sender = db.relationship('Users', back_populates='sent_messages')
-    receiver = db.relationship('Users', back_populates='received_messages')
+    receiver_user = db.relationship('Users', back_populates='received_messages')
 
     def __repr__(self):
         return f"<Message {self.id}>"
