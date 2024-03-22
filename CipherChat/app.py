@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
     date_of_birth = db.Column(db.Date, nullable=False)  # Use Date type for date_of_birth
     profile_picture = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
-    content = db.Column(db.String, default="")
+    content = db.Column(db.String(255), nullable=False, default="")
 
     sent_messages = db.relationship("Message", back_populates="sender", lazy=True, foreign_keys="Message.sender_id")
     received_messages = db.relationship("Message", back_populates="receiver", lazy=True, foreign_keys="Message.receiver_id")
@@ -344,9 +344,18 @@ def register():
             email=email,
             date_of_birth=date_of_birth,
             profile_picture=filename,
+            content=''
+            sender_id=User.id,
+            receiver_id=User.id
         )
 
         db.session.add(new_user)
+        db.session.commit()
+
+        new_user.sender_id = new_user.id
+        new_user.content = "Welcome to CipherChat! Feel free to start chatting."
+        new_user.receiver_id = new_user.id
+
         db.session.commit()
 
         flash("Registration successful! You can now log in.", "success")
