@@ -42,6 +42,8 @@ class Users(UserMixin, db.Model):
     date_of_birth = db.Column(db.String(50), nullable=False)
     profile_picture = db.Column(db.Text, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
+    sent_messages = db.relationship("Message", back_populates="sender", lazy=True)
+
 
     def __init__(self, username, password, name, email, date_of_birth, profile_picture):
         self.username = username
@@ -68,8 +70,8 @@ class Message(db.Model):
     content = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.now(), nullable=False)
 
-    sender = db.relationship('Users', back_populates='sent_messages', foreign_keys=[sender_id])
-    receiver = db.relationship('Users', back_populates='received_messages', foreign_keys=[receiver_id])
+    sender = db.relationship('Users', back_populates='sent_messages')
+    receiver = db.relationship('Users', back_populates='received_messages')
 
     def __repr__(self):
         return f"<Message {self.id}>"
